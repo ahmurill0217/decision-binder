@@ -1,0 +1,7 @@
+{
+  "tests_passed": 11,
+  "cached_rerun_identical_processed_sha256": true,
+  "cached_rerun_identical_counts": true,
+  "processed_sha256": "fc724cd182e361b2eec29d426c0c269ea6210e853636534e2212065c29c552d0",
+  "notes": "Count dictionaries normalized through JSON because JSON object keys are strings."
+}

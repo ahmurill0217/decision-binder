@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decision-binder"
+version = "0.1.0"
+description = "Reproducible Adaptyv binder preprocessing for a future d1-3B SFT experiment"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets==5.1.0",
+    "huggingface-hub==2.3.0",
+    "pandas==3.1.0",
+    "numpy==2.5.4",
+    "pyarrow==26.0.0",
+    "PyYAML==6.0.3",
+    "transformers==5.19.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0"]
+evaluation = [
+    "pillow>=12,<13",
+    "scikit-learn>=1.8,<2",
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+]
+training = [
+    "peft==0.21.2",
+    "pillow>=12,<13",
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "trl==1.15.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,72 @@
+dataset:
+  id: Anthropic/claude-protein-binder-design
+  revision: 9e1b81696da46835e9e9cde9a3da976e0abc92ab
+  split: full
+preprocessing:
+  not_expressed: exclude # alternative: non_binder
+  prediction_scope: primary # alternative: author_pooled (comparison only)
+  near_duplicate_identity: 0.90
+paths:
+  raw: data/raw
+  processed: data/processed
+  results: results
+splits:
+  seed: 1337
+  fractions: [0.70, 0.15, 0.15] # train, validation, test
+  search_trials: 64
+  # Reuse preprocessing.near_duplicate_identity for sequence components.
+  target_holdout:
+    # Empty lists select entire targets automatically using sizes, never labels.
+    validation_targets: []
+    test_targets: []
+# Training remains deferred; baseline evaluation uses a validation-only threshold.
+model:
+  id: LiquidAI/d1-3B
+  revision: 051bcc464b01b9f92942b364d9586b0ef5912432
+  assets_sha256:
+    prompt.py: a20b5f52e41a6d29e694bb8c861a5a4803ce3eb69364edad79511ccf8edb5c31
+    tokenizer.json: 8096ecb9f54599d756c8de728a598a340bc1e43c0deb77ddd62456c38349fcee
+    tokenizer_config.json: ef6770d12dd9ac58d334e979bf160c5cdfd41f13d205fd5d5516857645feb0ea
+    chat_template.jinja: 86f4770449a4797c9b4212d110b0cc70fb993c1ce960095bcfb12eea22f61cca
+    LICENSE: 4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c
+sft:
+  seed: 1337
+training:
+  seed: 1337
+  experiment: primary
+  output_dir: artifacts/lora/primary
+  precision: auto # CUDA bf16 if natively supported; fp16 on T4
+  per_device_train_batch_size: 1 # long structural prompts; effective batch stays 16
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 16
+  learning_rate: 0.0002
+  num_train_epochs: 1
+  lr_scheduler_type: cosine
+  warmup_steps: 0.05 # TRL/Transformers pinned versions accept a fraction
+  max_length: 2048
+  gradient_checkpointing: true
+  gradient_checkpointing_kwargs:
+    use_reentrant: false
+  optim: adamw_torch
+  max_grad_norm: 1.0
+  logging_steps: 10
+  eval_strategy: steps
+  eval_steps: 25
+  save_strategy: steps
+  save_steps: 25
+  save_total_limit: 2
+  load_best_model_at_end: false
+  minimum_gpu_memory_gib: 14
+  lora:
+    r: 16
+    lora_alpha: 32
+    lora_dropout: 0.05
+    bias: none
+    task_type: CAUSAL_LM
+    target_modules: [q_proj, k_proj, v_proj, out_proj, in_proj, w1, w2, w3]
+    exclude_modules: '.*vision_tower.*'
+  smoke:
+    train_examples: 8
+    validation_examples: 4
+    max_steps: 2
+    gradient_accumulation_steps: 1

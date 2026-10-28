@@ -1,0 +1,12 @@
+{
+  "tests_passed": 43,
+  "complete_disjoint_uuid_coverage": true,
+  "labels_and_targets_match_source": true,
+  "threshold_recomputed_from_validation_only": true,
+  "metrics_recomputed_from_saved_predictions": true,
+  "code_and_run_hashes_verified": true,
+  "prediction_sha256": {
+    "validation_predictions.parquet": "fbf9fa507ea1e84c0b9b347673e5fc0b868945900ed9829d37a3edd18175fb4d",
+    "test_predictions.parquet": "f35ccd7ab0df09e128e4d14812fd2e5cad834481da3238e2f1931247c425ebdf"
+  }
+}

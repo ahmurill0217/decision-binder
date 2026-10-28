@@ -1,0 +1,13 @@
+{
+  "unit_tests_passed": 50,
+  "actual_model_cpu_preflight_passed": true,
+  "actual_trl_masks_verified_train": 754,
+  "actual_trl_masks_verified_validation": 161,
+  "trainable_lora_parameters": 24461312,
+  "gpu_smoke_executed": false,
+  "gpu_smoke_status": "Pending Colab execution at user request",
+  "full_training_executed": false,
+  "adapter_saved": false,
+  "notebook_cells_syntax_checked": true,
+  "preflight_metadata_sha256": "0add8a7e70c6339cdeb704f71ad7f2303b985290197c812d525ea37091d5e580"
+}

@@ -1,0 +1,17 @@
+{
+  "tests_passed": 21,
+  "integration": {
+    "primary": {
+      "identical_rerun_hashes": true,
+      "parquet_reconstructs_source_exactly": true,
+      "uuid_and_sequence_groups_disjoint": true,
+      "target_disjoint": false
+    },
+    "target_holdout": {
+      "identical_rerun_hashes": true,
+      "parquet_reconstructs_source_exactly": true,
+      "uuid_and_sequence_groups_disjoint": true,
+      "target_disjoint": true
+    }
+  }
+}

@@ -1,0 +1,394 @@
+{
+  "mode": "target_holdout",
+  "options": {
+    "seed": 1337,
+    "fractions": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "search_trials": 64,
+    "target_holdout": {
+      "validation_targets": [],
+      "test_targets": []
+    }
+  },
+  "dataset": {
+    "id": "Anthropic/claude-protein-binder-design",
+    "revision": "9e1b81696da46835e9e9cde9a3da976e0abc92ab",
+    "split": "full"
+  },
+  "preprocessing_report_sha256": "3f46158ed23430564b9899123a86203f4ad1a62cab1adadd8790f1598cbb9ebc",
+  "input_sha256": "fc724cd182e361b2eec29d426c0c269ea6210e853636534e2212065c29c552d0",
+  "source_designs_sha256": "ab2e9f77cb868a1bb0a3b6af0ed16834b17c1da2cda542760c31a535c49c0327",
+  "code_sha256": {
+    "splits.py": "2db46b950092b1d56028c309e2eb0caec6296654048211fa596018a73a9bbd67",
+    "data.py": "faa0a63d1710766b94dc068b10de938ac0c65899a7472dc4b6ecf1e52104edb9"
+  },
+  "sequence_identity_threshold": 0.9,
+  "grouping": "transitive equal-length position-wise identity; all source designs included as bridges",
+  "multi_record_groups": 19,
+  "largest_group": 3,
+  "summary": [
+    {
+      "split": "train",
+      "records": 755,
+      "fraction": 0.7016728624535316,
+      "binders": 218,
+      "non_binders": 537,
+      "binder_fraction": 0.28874172185430463,
+      "targets": 10,
+      "sequence_groups": 734
+    },
+    {
+      "split": "validation",
+      "records": 159,
+      "fraction": 0.14776951672862454,
+      "binders": 47,
+      "non_binders": 112,
+      "binder_fraction": 0.29559748427672955,
+      "targets": 3,
+      "sequence_groups": 158
+    },
+    {
+      "split": "test",
+      "records": 162,
+      "fraction": 0.15055762081784388,
+      "binders": 29,
+      "non_binders": 133,
+      "binder_fraction": 0.17901234567901234,
+      "targets": 2,
+      "sequence_groups": 162
+    }
+  ],
+  "target_representation": [
+    {
+      "split": "train",
+      "target": "15-PGDH",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "train",
+      "target": "BBF-14",
+      "records": 78,
+      "binders": 1,
+      "non_binders": 77
+    },
+    {
+      "split": "train",
+      "target": "BHRF1",
+      "records": 59,
+      "binders": 12,
+      "non_binders": 47
+    },
+    {
+      "split": "train",
+      "target": "Cas9",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "train",
+      "target": "EGFR",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "train",
+      "target": "IL-7Ra",
+      "records": 78,
+      "binders": 45,
+      "non_binders": 33
+    },
+    {
+      "split": "train",
+      "target": "Latent GDF-8",
+      "records": 52,
+      "binders": 13,
+      "non_binders": 39
+    },
+    {
+      "split": "train",
+      "target": "MBP",
+      "records": 86,
+      "binders": 0,
+      "non_binders": 86
+    },
+    {
+      "split": "train",
+      "target": "Nipah-G",
+      "records": 63,
+      "binders": 17,
+      "non_binders": 46
+    },
+    {
+      "split": "train",
+      "target": "PD-L1",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "train",
+      "target": "RBX1",
+      "records": 78,
+      "binders": 23,
+      "non_binders": 55
+    },
+    {
+      "split": "train",
+      "target": "TNFa",
+      "records": 118,
+      "binders": 4,
+      "non_binders": 114
+    },
+    {
+      "split": "train",
+      "target": "TREM2",
+      "records": 67,
+      "binders": 56,
+      "non_binders": 11
+    },
+    {
+      "split": "train",
+      "target": "TrkA",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "train",
+      "target": "VEGF-A",
+      "records": 76,
+      "binders": 47,
+      "non_binders": 29
+    },
+    {
+      "split": "validation",
+      "target": "15-PGDH",
+      "records": 29,
+      "binders": 1,
+      "non_binders": 28
+    },
+    {
+      "split": "validation",
+      "target": "BBF-14",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "BHRF1",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "Cas9",
+      "records": 59,
+      "binders": 7,
+      "non_binders": 52
+    },
+    {
+      "split": "validation",
+      "target": "EGFR",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "IL-7Ra",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "Latent GDF-8",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "MBP",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "Nipah-G",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "PD-L1",
+      "records": 71,
+      "binders": 39,
+      "non_binders": 32
+    },
+    {
+      "split": "validation",
+      "target": "RBX1",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "TNFa",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "TREM2",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "TrkA",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "validation",
+      "target": "VEGF-A",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "15-PGDH",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "BBF-14",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "BHRF1",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "Cas9",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "EGFR",
+      "records": 82,
+      "binders": 9,
+      "non_binders": 73
+    },
+    {
+      "split": "test",
+      "target": "IL-7Ra",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "Latent GDF-8",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "MBP",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "Nipah-G",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "PD-L1",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "RBX1",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "TNFa",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "TREM2",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    },
+    {
+      "split": "test",
+      "target": "TrkA",
+      "records": 80,
+      "binders": 20,
+      "non_binders": 60
+    },
+    {
+      "split": "test",
+      "target": "VEGF-A",
+      "records": 0,
+      "binders": 0,
+      "non_binders": 0
+    }
+  ],
+  "warnings": [],
+  "checks": {
+    "uuid_disjoint": true,
+    "complete_partition": true,
+    "sequence_groups_disjoint": true,
+    "targets_disjoint": true
+  },
+  "output_sha256": {
+    "assignments.parquet": "7e9969c2bd042a91dd23346466a47e438bcc646b3959ac6451edaaf6cfdc2762",
+    "test.parquet": "0498724b2215ffb507e21fe996098429adebd974ae65c2be86444d2422752680",
+    "train.parquet": "8d55aef2b45d78ed79e35aa22dce448fda8f6837870aa05ed37f67ed9b5ade6f",
+    "validation.parquet": "5447c3630747c0dd696f6e57829cc50f2af45a933a61b99507a64013741f47ca"
+  }
+}

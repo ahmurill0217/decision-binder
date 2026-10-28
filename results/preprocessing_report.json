@@ -1,0 +1,235 @@
+{
+  "created_at_utc": "2026-10-28T04:01:51.447100+00:00",
+  "source": {
+    "source": {
+      "id": "Anthropic/claude-protein-binder-design",
+      "revision": "9e1b81696da46835e9e9cde9a3da976e0abc92ab",
+      "split": "full"
+    },
+    "sha256": {
+      "design_summary": "ab2e9f77cb868a1bb0a3b6af0ed16834b17c1da2cda542760c31a535c49c0327",
+      "insilico_cofold_predictions": "705ebb6e42ed095724fc4e6a56462248e2bdbba869ca5f7dc95ae7989b1e9a87"
+    }
+  },
+  "config": {
+    "dataset": {
+      "id": "Anthropic/claude-protein-binder-design",
+      "revision": "9e1b81696da46835e9e9cde9a3da976e0abc92ab",
+      "split": "full"
+    },
+    "preprocessing": {
+      "not_expressed": "exclude",
+      "prediction_scope": "primary",
+      "near_duplicate_identity": 0.9
+    },
+    "paths": {
+      "raw": "data/raw",
+      "processed": "data/processed",
+      "results": "results"
+    },
+    "model": {
+      "id": "LiquidAI/d1-3B"
+    }
+  },
+  "counts": {
+    "designs_raw": 1440,
+    "predictions_raw": 113550,
+    "predictions_boltz2": 11400,
+    "predictions_selected": 7200,
+    "aggregated_designs": 1440,
+    "resolved_labels": 1235,
+    "complete_metadata_and_labels": 1235,
+    "final_records": 1076,
+    "raw_label_distribution": {
+      "non_binder": 899,
+      "binder": 336,
+      "not_tested": 100,
+      "not_expressed": 61,
+      "inconclusive": 44
+    },
+    "final_label_distribution": {
+      "0": 782,
+      "1": 294
+    },
+    "exclusions": {
+      "included": 1076,
+      "unresolved_or_excluded_label": 205,
+      "missing_aggregate": 159
+    },
+    "selected_rows_per_design": {
+      "5": 1440
+    },
+    "missing_selected_metrics": {
+      "sc_dockq": 830,
+      "dockq_fnat": 830,
+      "dockq_irms": 830,
+      "dockq_lrms": 830,
+      "ipsae_min": 0,
+      "ipsae_max": 0,
+      "ipsae_binder_to_target": 0,
+      "ipsae_target_to_binder": 0,
+      "iptm_pae": 0,
+      "ptm_pae": 0,
+      "lis": 0,
+      "plddt_binder": 0,
+      "plddt_target": 0,
+      "pae_interface_mean": 0,
+      "pae_interface_min": 0,
+      "n_interface_contacts": 0
+    }
+  },
+  "author_pooled_comparison": {
+    "designs_raw": 1440,
+    "predictions_raw": 113550,
+    "predictions_boltz2": 11400,
+    "predictions_selected": 11400,
+    "aggregated_designs": 1440,
+    "resolved_labels": 1235,
+    "complete_metadata_and_labels": 1235,
+    "final_records": 1082,
+    "raw_label_distribution": {
+      "non_binder": 899,
+      "binder": 336,
+      "not_tested": 100,
+      "not_expressed": 61,
+      "inconclusive": 44
+    },
+    "final_label_distribution": {
+      "0": 788,
+      "1": 294
+    },
+    "exclusions": {
+      "included": 1082,
+      "unresolved_or_excluded_label": 205,
+      "missing_aggregate": 153
+    },
+    "selected_rows_per_design": {
+      "5": 720,
+      "10": 600,
+      "15": 120
+    },
+    "missing_selected_metrics": {
+      "sc_dockq": 2175,
+      "dockq_fnat": 2175,
+      "dockq_irms": 2175,
+      "dockq_lrms": 2175,
+      "ipsae_min": 0,
+      "ipsae_max": 0,
+      "ipsae_binder_to_target": 0,
+      "ipsae_target_to_binder": 0,
+      "iptm_pae": 0,
+      "ptm_pae": 0,
+      "lis": 0,
+      "plddt_binder": 0,
+      "plddt_target": 0,
+      "pae_interface_mean": 0,
+      "pae_interface_min": 0,
+      "n_interface_contacts": 0
+    }
+  },
+  "features": [
+    "target",
+    "binder_length",
+    "generator",
+    "sequence_design_method",
+    "epitope_n_residues",
+    "sc_dockq_min",
+    "sc_dockq_max",
+    "sc_dockq_mean",
+    "sc_dockq_std",
+    "sc_dockq_median",
+    "dockq_fnat_min",
+    "dockq_fnat_max",
+    "dockq_fnat_mean",
+    "dockq_fnat_std",
+    "dockq_fnat_median",
+    "dockq_irms_min",
+    "dockq_irms_max",
+    "dockq_irms_mean",
+    "dockq_irms_std",
+    "dockq_irms_median",
+    "dockq_lrms_min",
+    "dockq_lrms_max",
+    "dockq_lrms_mean",
+    "dockq_lrms_std",
+    "dockq_lrms_median",
+    "ipsae_min_min",
+    "ipsae_min_max",
+    "ipsae_min_mean",
+    "ipsae_min_std",
+    "ipsae_min_median",
+    "ipsae_max_min",
+    "ipsae_max_max",
+    "ipsae_max_mean",
+    "ipsae_max_std",
+    "ipsae_max_median",
+    "ipsae_binder_to_target_min",
+    "ipsae_binder_to_target_max",
+    "ipsae_binder_to_target_mean",
+    "ipsae_binder_to_target_std",
+    "ipsae_binder_to_target_median",
+    "ipsae_target_to_binder_min",
+    "ipsae_target_to_binder_max",
+    "ipsae_target_to_binder_mean",
+    "ipsae_target_to_binder_std",
+    "ipsae_target_to_binder_median",
+    "iptm_pae_min",
+    "iptm_pae_max",
+    "iptm_pae_mean",
+    "iptm_pae_std",
+    "iptm_pae_median",
+    "ptm_pae_min",
+    "ptm_pae_max",
+    "ptm_pae_mean",
+    "ptm_pae_std",
+    "ptm_pae_median",
+    "lis_min",
+    "lis_max",
+    "lis_mean",
+    "lis_std",
+    "lis_median",
+    "plddt_binder_min",
+    "plddt_binder_max",
+    "plddt_binder_mean",
+    "plddt_binder_std",
+    "plddt_binder_median",
+    "plddt_target_min",
+    "plddt_target_max",
+    "plddt_target_mean",
+    "plddt_target_std",
+    "plddt_target_median",
+    "pae_interface_mean_min",
+    "pae_interface_mean_max",
+    "pae_interface_mean_mean",
+    "pae_interface_mean_std",
+    "pae_interface_mean_median",
+    "pae_interface_min_min",
+    "pae_interface_min_max",
+    "pae_interface_min_mean",
+    "pae_interface_min_std",
+    "pae_interface_min_median",
+    "n_interface_contacts_min",
+    "n_interface_contacts_max",
+    "n_interface_contacts_mean",
+    "n_interface_contacts_std",
+    "n_interface_contacts_median"
+  ],
+  "related_sequence_pairs": 36,
+  "exact_sequence_pairs": 0,
+  "retained_related_pairs": 24,
+  "python": "3.12.13",
+  "versions": {
+    "datasets": "5.1.0",
+    "huggingface-hub": "2.3.0",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4",
+    "pyarrow": "26.0.0",
+    "PyYAML": "6.0.3"
+  },
+  "code_sha256": {
+    "__init__.py": "296962a787b8198a091e1507ef12416ad1643ed7fa2d67c8fab6d73ef2e657e8",
+    "features.py": "34e324f9746a8c5bf605782a1bd66856bd61077e64045f89351d911cab7724d7",
+    "data.py": "faa0a63d1710766b94dc068b10de938ac0c65899a7472dc4b6ecf1e52104edb9"
+  },
+  "processed_sha256": "fc724cd182e361b2eec29d426c0c269ea6210e853636534e2212065c29c552d0"
+}

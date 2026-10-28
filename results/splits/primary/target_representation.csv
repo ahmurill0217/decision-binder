@@ -1,0 +1,46 @@
+split,target,records,binders,non_binders
+train,15-PGDH,17,1,16
+train,BBF-14,61,1,60
+train,BHRF1,42,11,31
+train,Cas9,44,4,40
+train,EGFR,55,6,49
+train,IL-7Ra,52,30,22
+train,Latent GDF-8,34,7,27
+train,MBP,61,0,61
+train,Nipah-G,44,13,31
+train,PD-L1,54,29,25
+train,RBX1,51,16,35
+train,TNFa,88,2,86
+train,TREM2,47,39,8
+train,TrkA,55,15,40
+train,VEGF-A,49,32,17
+validation,15-PGDH,6,0,6
+validation,BBF-14,8,0,8
+validation,BHRF1,10,0,10
+validation,Cas9,10,2,8
+validation,EGFR,10,1,9
+validation,IL-7Ra,14,7,7
+validation,Latent GDF-8,8,3,5
+validation,MBP,9,0,9
+validation,Nipah-G,6,1,5
+validation,PD-L1,12,7,5
+validation,RBX1,14,4,10
+validation,TNFa,17,0,17
+validation,TREM2,12,10,2
+validation,TrkA,12,2,10
+validation,VEGF-A,13,7,6
+test,15-PGDH,6,0,6
+test,BBF-14,9,0,9
+test,BHRF1,7,1,6
+test,Cas9,5,1,4
+test,EGFR,17,2,15
+test,IL-7Ra,12,8,4
+test,Latent GDF-8,10,3,7
+test,MBP,16,0,16
+test,Nipah-G,13,3,10
+test,PD-L1,5,3,2
+test,RBX1,13,3,10
+test,TNFa,13,2,11
+test,TREM2,8,7,1
+test,TrkA,13,3,10
+test,VEGF-A,14,8,6

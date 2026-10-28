@@ -1,0 +1,9 @@
+{
+  "tests_passed": 34,
+  "tests_skipped": 0,
+  "primary_fresh_process_rerun_byte_identical": true,
+  "both_experiments_reload_successfully": true,
+  "model_weights_loaded": false,
+  "trainer_initialized": false,
+  "completion_only_loss_mask": "Deferred to later trainer/collator verification"
+}

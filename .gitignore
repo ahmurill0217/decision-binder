@@ -7,3 +7,22 @@ data/processed/*
 data/sft/*
 artifacts/
 !**/.gitkeep
+# Downloaded Colab training run (weights and optimizer checkpoints)
+/full/
+# Keep learned weights, optimizer state, and runtime caches out of public Git.
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.bin
+checkpoint-*/
+checkpoints/
+.cache/
+.ipynb_checkpoints/
+.DS_Store
+.env
+.env.*
+# Isolated quickstart runs preserve checked-in experiment evidence.
+configs/*.local.yaml
+/results/reproduction/
+*.joblib

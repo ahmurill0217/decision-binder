@@ -1,6 +1,6 @@
 # Milestone 1 methodology
 
-The future hypothesis concerns SFT versus zero-shot d1-3B. This milestone produces a labeled feature cohort only; no evidence about model performance exists yet.
+This document describes preprocessing, independently of subsequent model evaluation. The pooled comparator reproduces preprocessing counts only. Our original and fine-tuned d1-3B scores come from a new grouped random split; they do not reproduce the source article’s reported model performance.
 
 ## Cohort and labels
 

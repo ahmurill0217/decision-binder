@@ -1,0 +1,11 @@
+{
+  "source": "User-supplied full/ Colab run",
+  "files": {
+    "metadata.json": "eacb244baea99fab3c57f341b779a1411bb21a79238f1e78a0d88034f349d3c9",
+    "config.yaml": "bb96bae1453fa42b63a57e8a0df7574f4899c2d36166d582d3e16c787fc2718c",
+    "progress.json": "cd1cdd69d2e3f3ffa2bccfea9ee317f575b5c2b7075e8a3f2b65839262877801",
+    "trainer_state.json": "1a7c9e57eb223f6cde7eb8f064f9e3945363f717b1154d277dc5d8d69736f6dc"
+  },
+  "original_metadata_sha256": "eacb244baea99fab3c57f341b779a1411bb21a79238f1e78a0d88034f349d3c9",
+  "metadata_copy_is_identical": true
+}

@@ -1,0 +1,12 @@
+{
+  "offline_cpu_tests_passed": 65,
+  "integration_tests_deselected": 10,
+  "all_local_readme_links_resolve": true,
+  "six_cli_help_commands_passed": true,
+  "prepare_entrypoint_split_orchestration_test_passed": true,
+  "custom_config_comparison_test_passed": true,
+  "comparison_generated_from_saved_predictions": true,
+  "no_training_or_inference_rerun": true,
+  "readme_sha256": "ba748cb8ba7a6d30534f9a66e0cfe1a56f38a245c1e9bec89f8ab6685635af16",
+  "generated_table_sha256": "c5de84df27eedbc10a01fd2d54d420b60440d752e1c4247854db02f8ae413955"
+}

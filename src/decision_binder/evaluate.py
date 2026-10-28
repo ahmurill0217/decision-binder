@@ -4,6 +4,7 @@ import importlib
 from importlib.metadata import version
 import json
 import math
+import platform
 from pathlib import Path
 import time
 
@@ -30,7 +31,7 @@ def binder_probability(response):
     return float(probs["Binder"])
 
 
-def load_base(config, root, download=False, device="auto"):
+def load_base(config, root, download=False, device="auto", adapter=None):
     import torch
     from transformers import AutoModel
     directory = root / config["paths"]["raw"] / "d1_base"
@@ -44,9 +45,19 @@ def load_base(config, root, download=False, device="auto"):
     if device == "auto":
         device = "mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu"
     dtype = torch.float32 if device == "cpu" else torch.bfloat16
+    if device == "cuda" and not torch.cuda.is_bf16_supported(including_emulation=False):
+        dtype = torch.float16
     torch.manual_seed(config["splits"]["seed"])
     # Loading local files guarantees all code and weights come from one snapshot.
     model = AutoModel.from_pretrained(str(directory), trust_remote_code=True, local_files_only=True, dtype=dtype).to(device).eval()
+    if adapter is not None:
+        from peft import PeftModel
+        # Keep adapters active inside the native D1Model. Calling a forwarded
+        # system_one on the wrapper must not bypass them; no weight merge/rounding.
+        wrapped = PeftModel.from_pretrained(model, str(adapter), is_trainable=False)
+        model = wrapped.get_base_model().eval()
+        if not any("lora_" in name for name, _ in model.named_parameters()):
+            raise ValueError("Adapter was not installed in the native decision model")
     model.requires_grad_(False)
     # Use the model's supported API engine; replace only its tokenizer with the
     # already hash-verified tokenizer. No calibration or prompt overrides.
@@ -59,6 +70,14 @@ def load_base(config, root, download=False, device="auto"):
                   "revision": config["model"]["revision"], "batch_size": 1,
                   "model_files_sha256": {name: digest(directory / name) for name in MODEL_FILES},
                   "versions": {name: version(name) for name in ("torch", "transformers", "tokenizers", "scikit-learn")}}
+    provenance["hardware"] = {"platform": platform.platform(), "machine": platform.machine(),
+                              "python": platform.python_version(), "processor": platform.processor()}
+    if device == "cuda":
+        props = torch.cuda.get_device_properties(0)
+        provenance["hardware"].update(accelerator=props.name, memory_bytes=props.total_memory,
+                                      compute_capability=list(torch.cuda.get_device_capability()))
+    elif device == "mps":
+        provenance["hardware"]["accelerator"] = "Apple Metal (MPS)"
     return model, tokenizer, utility, native_prompt, provenance
 
 
@@ -105,7 +124,7 @@ def score_frame(frame, split, model, tokenizer, utility, native_prompt, seed, mo
     return pd.DataFrame(rows).sort_values("uuid").reset_index(drop=True)
 
 
-def run(config_path, mode="primary", download=False, device="auto"):
+def run(config_path, mode="primary", download=False, device="auto", adapter=None):
     config_path = Path(config_path).resolve()
     config = yaml.safe_load(config_path.read_text())
     root = config_path.parent.parent
@@ -125,10 +144,26 @@ def run(config_path, mode="primary", download=False, device="auto"):
     validate_assignment(pd.concat(frames.values()), pd.read_parquet(split_dir / "assignments.parquet"), mode)
     # Training contributes only the trivial majority class, never model updates.
     majority = int(frames["train"].label.value_counts().sort_index().idxmax())
-    model, tokenizer, utility, native_prompt, provenance = load_base(config, root, download, device)
-    directory = results / "zero_shot" / mode
+    adapter_provenance = None
+    if adapter is not None:
+        from .compare import verify_adapter, verify_cohort
+        adapter = Path(adapter).resolve()
+        adapter_provenance = verify_adapter(adapter, config, frames, root)
+        baseline = results / "zero_shot" / mode
+        for split in ("validation", "test"):
+            verify_cohort(pd.read_parquet(baseline / f"{split}_predictions.parquet"), frames[split])
+        base_manifest = json.loads((baseline / "run_manifest.json").read_text())
+        if (base_manifest["split_report_sha256"] != digest(report_path)
+                or base_manifest["sft_seed"] != config["sft"]["seed"]
+                or base_manifest["provenance"]["revision"] != config["model"]["revision"]):
+            raise ValueError("Baseline evaluation provenance mismatch")
+    model, tokenizer, utility, native_prompt, provenance = load_base(config, root, download, device, adapter)
+    if adapter_provenance is not None:
+        provenance["adapter"] = adapter_provenance
+    directory = results / ("fine_tuned" if adapter is not None else "zero_shot") / mode
     directory.mkdir(parents=True, exist_ok=True)
     manifest = {"model_identifier": config["model"]["id"], "mode": mode,
+                "config": config,
                 "provenance": provenance, "split_report_sha256": digest(report_path),
                 "sft_seed": config["sft"]["seed"], "majority_class_from_training": majority,
                 "code_sha256": {name: digest(Path(__file__).with_name(name)) for name in ("evaluate.py", "prompts.py", "metrics.py")}}
@@ -154,6 +189,8 @@ def run(config_path, mode="primary", download=False, device="auto"):
     for split, frame in (("validation", validation), ("test", test)):
         frame["predicted_class"] = (frame.binder_probability >= selection["threshold"]).astype(int)
         frame["threshold"] = selection["threshold"]
+        if adapter_provenance is not None:
+            frame["adapter_sha256"] = adapter_provenance["files_sha256"]["adapter_model.safetensors"]
         frame.to_parquet(directory / f"{split}_predictions.parquet", index=False)
         frame.to_csv(directory / f"{split}_predictions.csv", index=False)
         metrics[split] = classification_metrics(frame.ground_truth_label, frame.binder_probability, selection["threshold"], majority)

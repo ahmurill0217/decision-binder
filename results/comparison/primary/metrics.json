@@ -1,0 +1,112 @@
+{
+  "metrics": {
+    "Base d1-3B": {
+      "records": 161,
+      "binders": 44,
+      "threshold": 0.7431680086124811,
+      "roc_auc": 0.6221833721833722,
+      "pr_auc_average_precision": 0.35090989909544523,
+      "pr_auc_trapezoidal": 0.35100406990739147,
+      "precision": 0.35714285714285715,
+      "recall": 0.45454545454545453,
+      "f1": 0.4,
+      "balanced_accuracy": 0.5734265734265734,
+      "accuracy": 0.6273291925465838,
+      "confusion_matrix": [
+        [
+          81,
+          36
+        ],
+        [
+          24,
+          20
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7267080745341615,
+      "warnings": []
+    },
+    "Fine-tuned d1-3B": {
+      "records": 161,
+      "binders": 44,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.8292540792540792,
+      "pr_auc_average_precision": 0.6379665405165098,
+      "pr_auc_trapezoidal": 0.6365896513665731,
+      "precision": 0.5818181818181818,
+      "recall": 0.7272727272727273,
+      "f1": 0.6464646464646465,
+      "balanced_accuracy": 0.7653457653457654,
+      "accuracy": 0.782608695652174,
+      "confusion_matrix": [
+        [
+          94,
+          23
+        ],
+        [
+          12,
+          32
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7267080745341615,
+      "warnings": []
+    },
+    "Logistic regression": {
+      "records": 161,
+      "binders": 44,
+      "threshold": 0.390755733631567,
+      "roc_auc": 0.857031857031857,
+      "pr_auc_average_precision": 0.6900208933608466,
+      "pr_auc_trapezoidal": 0.6854012651534583,
+      "precision": 0.6122448979591837,
+      "recall": 0.6818181818181818,
+      "f1": 0.6451612903225806,
+      "balanced_accuracy": 0.7597125097125097,
+      "accuracy": 0.7950310559006211,
+      "confusion_matrix": [
+        [
+          98,
+          19
+        ],
+        [
+          14,
+          30
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7267080745341615,
+      "warnings": []
+    }
+  },
+  "cohort_verified": true,
+  "prediction_sha256": {
+    "Base d1-3B": "f35ccd7ab0df09e128e4d14812fd2e5cad834481da3238e2f1931247c425ebdf",
+    "Fine-tuned d1-3B": "185000ae2830037b5336e3570a7e0cc362e62a7563796c40cfca760cfa8e7988",
+    "Logistic regression": "5bbe2f4def0c22c03ba0fd01b9c4f75df3c4f96634576ed9f0dfb32a48165996"
+  },
+  "inference_hardware": {
+    "Base d1-3B": {
+      "device": "mps",
+      "dtype": "torch.bfloat16"
+    },
+    "Fine-tuned d1-3B": {
+      "device": "mps",
+      "dtype": "torch.bfloat16"
+    },
+    "Logistic regression": {
+      "device": "cpu",
+      "dtype": "float64"
+    }
+  },
+  "provenance_warnings": [
+    "Colab training SFT file hashes differ from local SFT files. UUIDs and dataset/preprocessing/split/model/prompt-seed configurations match; exact training prompt byte equality is unverified. Evaluation uses the original local baseline cohort."
+  ],
+  "model_protocol_notes": {
+    "Logistic regression": "Baseline added after d1 test results were known; no test-based hyperparameter/feature search. Not a preregistered independent replication."
+  },
+  "note": "Each model uses its own validation-selected threshold; PR-AUC means average precision. Hardware/precision differences may affect comparison."
+}

@@ -1,6 +1,6 @@
 # Section 6: TRL supervised fine-tuning with LoRA
 
-**Status:** implementation and real-model CPU preflight are complete. GPU execution was left for Colab at the user's request. No optimizer steps have run, no trained adapter exists yet, and neither a T4 smoke pass nor its peak memory usage is claimed. Full training is disabled by default.
+**Status:** CPU preflight and Colab T4 smoke/full training completed. The full run trained for one epoch (48 updates, no AMP skips), with training loss 0.278069 and validation loss 0.224423. Adapter save/reload passed. Full training remains disabled by default in the wrapper. Machine-readable evidence is in `results/training/primary_full/metadata.json`; weights and checkpoints remain ignored by Git.
 
 ## Files and installation
 
@@ -44,7 +44,7 @@ In TRL 1.15.0, dataset preparation tokenizes the prompt and combined prompt/comp
 
 The recommended reference is an NVIDIA T4 (16 GB marketed, approximately 14.6 GiB reported). Before loading weights, the CLI displays/records GPU identity, compute capability, total/free memory, and selected precision. It requires at least 14 GiB total and 10 GiB free memory. `auto` selects native bf16 where supported and fp16 on T4; unsupported explicit bf16 fails. No CPU/MPS fallback is made for a requested training run.
 
-Unquantized base weights alone need roughly 6 GB in half precision. LoRA weights, gradients, optimizer state, activations, temporary attention/loss buffers, allocator overhead, and checkpoints add memory. The total cannot be certified from parameter count. Microbatch 1 and checkpointing reduce activation pressure; actual CUDA peak allocated/reserved memory is measured and saved by the smoke test. **T4 peak memory remains unmeasured here.** If smoke fails with OOM, stop and review its metadata/runtime rather than silently switching methods or claiming compatibility. Checkpoint storage and free disk are separate from GPU memory; allow room for weights and optimizer checkpoints.
+Unquantized base weights alone need roughly 6 GB in half precision. LoRA weights, gradients, optimizer state, activations, temporary attention/loss buffers, allocator overhead, and checkpoints add memory. The total cannot be certified from parameter count. Microbatch 1 and checkpointing reduce activation pressure; actual CUDA peak allocated/reserved memory is measured and saved by the smoke test. The user-reported smoke peak was 7.31 GiB; the full run’s measured peak is in its archived metadata. If smoke fails with OOM, stop and review its metadata/runtime rather than silently switching methods or claiming compatibility. Checkpoint storage and free disk are separate from GPU memory; allow room for weights and optimizer checkpoints.
 
 ## Colab smoke test
 
@@ -52,13 +52,13 @@ The first reported T4 run had finite losses but NaN gradient norms on both smoke
 
 If a run reports `Out of range float values are not JSON compliant: nan`, update the training code before retrying in a new output directory. The initial progress logger rejected nonfinite diagnostic metrics, obscuring which metric failed. Progress and metadata now encode these explicitly as strings (`NaN`, `Infinity`, `-Infinity`), while nonfinite training/validation loss still raises an error after saving the evidence. A nonfinite gradient norm may accompany a skipped fp16 AMP update; it is not by itself proof of nonfinite loss. Inspect `progress.json` and failure `log_history`; a passing smoke still requires finite losses and finite, changed adapter weights. The logger fix has CPU regression coverage; a new Colab smoke is required to verify GPU behavior.
 
-1. Publish this project to a Git repository. This local checkout currently has no Git remote; no repository URL has been invented or published by the implementation.
+1. Publish this project to a Git repository. Use your repository URL and pin the intended commit.
 2. Open `notebooks/finetune_colab.ipynb` in Colab. Set `REPO_URL`, preferably set `REPO_REF` to an immutable commit, and select an NVIDIA GPU runtime with Python >=3.12.
 3. Leave `RUN_FULL_TRAINING = False`. Enable Google Drive for persistent output, or download results before the ephemeral runtime disconnects.
 4. Run the cells. They clone the repository, install the locked training extra, display `nvidia-smi` and PyTorch GPU details, generate missing prepared datasets using existing scripts, and execute the Python smoke mode.
 5. Review `metadata.json`, printed train/validation loss, measured GPU memory, and the saved adapter. `status: passed` requires finite losses, finite changed LoRA weights, successful adapter saving, and exact tensor equality after reload into a fresh base model. An initial `preflight_passed` status does **not** mean the GPU smoke passed.
 
-The notebook generates datasets only if needed. The preparation pipeline may generate test artifacts as part of reproducible splitting; the training script never opens them. It does not run the baseline evaluator or any new evaluation method. Notebook Python cells were syntax-checked locally; no Colab cells have been executed here.
+The notebook generates datasets only if needed. The preparation pipeline may generate test artifacts as part of reproducible splitting; the training script never opens them. It does not run the baseline evaluator or any new evaluation method. Notebook Python cells were syntax-checked locally; GPU execution occurred in Colab; its completed metadata was supplied locally.
 
 Equivalent CUDA CLI smoke command:
 
@@ -80,4 +80,4 @@ In Colab, setting `RUN_FULL_TRAINING = True` is the corresponding explicit opt-i
 
 Artifacts include `adapter/` (PEFT adapter, config, tokenizer), trainer state/checkpoints, `progress.json`, and `metadata.json` (parameters, exact UUIDs used, source/model/code hashes, package versions, hardware, mask verification, losses, adapter changes, and reload checks). The adapter config names the upstream model and pinned revision rather than a Colab-local base path; no merge into base weights is performed. Persistent Drive storage is written directly rather than waiting until the final cell.
 
-Current saved artifact: `results/training/primary_preflight/metadata.json`. It documents CPU preflight only. GPU smoke loss, trained adapter, reload evidence, and T4 memory measurements remain pending execution in Colab. Full training has not been initiated.
+Saved artifacts: `results/training/primary_preflight/metadata.json` records CPU-only checks; `results/training/primary_full/metadata.json` preserves the completed Colab run. The downloaded `full/` directory contains the adapter/checkpoints and is ignored by Git.

@@ -71,3 +71,9 @@ training:
     validation_examples: 4
     max_steps: 2
     gradient_accumulation_steps: 1
+# Fixed before running the conventional ML comparison; no hyperparameter search.
+tabular:
+  seed: 1337
+  C: 1.0
+  max_iter: 2000
+  tol: 0.0001

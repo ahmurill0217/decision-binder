@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "decision-binder"
 version = "0.1.0"
-description = "Reproducible Adaptyv binder preprocessing for a future d1-3B SFT experiment"
+description = "Reproducible protein-binder preprocessing, d1-3B LoRA training and evaluation"
 requires-python = ">=3.12"
 dependencies = [
     "datasets==5.1.0",
@@ -20,6 +20,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest==9.2.0"]
 evaluation = [
+    "matplotlib>=3.10,<4",
+    "peft==0.21.2",
     "pillow>=12,<13",
     "scikit-learn>=1.8,<2",
     "torch==2.11.0",
@@ -39,3 +41,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+markers = ["integration: requires pre-existing pinned tokenizer or processed data assets; never required for synthetic unit tests"]

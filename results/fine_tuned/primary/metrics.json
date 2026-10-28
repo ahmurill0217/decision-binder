@@ -1,0 +1,543 @@
+{
+  "model_identifier": "LiquidAI/d1-3B",
+  "model_revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+  "mode": "primary",
+  "threshold_selection": {
+    "threshold": 0.2689414213699951,
+    "selection_split": "validation",
+    "objective": "balanced_accuracy",
+    "validation_objective": 0.7950660450660451,
+    "rule": "predict binder when probability >= threshold",
+    "candidates": "unique validation probabilities plus 0, 0.5, 1",
+    "tie_break": "scores equal to 12 decimals: closest to 0.5, then higher threshold",
+    "candidates_evaluated": 41,
+    "validation_decisions_sha256": "3fa066699138a78bb6cd97e1f631ba7c8a0865f42e5acdcecf95a9e2ab3785c4",
+    "test_used_for_selection": false
+  },
+  "metrics": {
+    "validation": {
+      "records": 161,
+      "binders": 44,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.8387723387723388,
+      "pr_auc_average_precision": 0.6156916297056645,
+      "pr_auc_trapezoidal": 0.6215466522973554,
+      "precision": 0.5428571428571428,
+      "recall": 0.8636363636363636,
+      "f1": 0.6666666666666666,
+      "balanced_accuracy": 0.7950660450660451,
+      "accuracy": 0.7639751552795031,
+      "confusion_matrix": [
+        [
+          85,
+          32
+        ],
+        [
+          6,
+          38
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7267080745341615,
+      "warnings": [],
+      "fixed_0_5_comparison": {
+        "records": 161,
+        "binders": 44,
+        "threshold": 0.5,
+        "roc_auc": 0.8387723387723388,
+        "pr_auc_average_precision": 0.6156916297056645,
+        "pr_auc_trapezoidal": 0.6215466522973554,
+        "precision": 0.625,
+        "recall": 0.5681818181818182,
+        "f1": 0.5952380952380952,
+        "balanced_accuracy": 0.7199883449883451,
+        "accuracy": 0.7888198757763976,
+        "confusion_matrix": [
+          [
+            102,
+            15
+          ],
+          [
+            19,
+            25
+          ]
+        ],
+        "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+        "majority_class_from_training": 0,
+        "majority_class_accuracy": 0.7267080745341615,
+        "warnings": []
+      }
+    },
+    "test": {
+      "records": 161,
+      "binders": 44,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.8292540792540792,
+      "pr_auc_average_precision": 0.6379665405165098,
+      "pr_auc_trapezoidal": 0.6365896513665731,
+      "precision": 0.5818181818181818,
+      "recall": 0.7272727272727273,
+      "f1": 0.6464646464646465,
+      "balanced_accuracy": 0.7653457653457654,
+      "accuracy": 0.782608695652174,
+      "confusion_matrix": [
+        [
+          94,
+          23
+        ],
+        [
+          12,
+          32
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7267080745341615,
+      "warnings": [],
+      "fixed_0_5_comparison": {
+        "records": 161,
+        "binders": 44,
+        "threshold": 0.5,
+        "roc_auc": 0.8292540792540792,
+        "pr_auc_average_precision": 0.6379665405165098,
+        "pr_auc_trapezoidal": 0.6365896513665731,
+        "precision": 0.6571428571428571,
+        "recall": 0.5227272727272727,
+        "f1": 0.5822784810126582,
+        "balanced_accuracy": 0.7100815850815851,
+        "accuracy": 0.7950310559006211,
+        "confusion_matrix": [
+          [
+            105,
+            12
+          ],
+          [
+            21,
+            23
+          ]
+        ],
+        "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+        "majority_class_from_training": 0,
+        "majority_class_accuracy": 0.7267080745341615,
+        "warnings": []
+      }
+    }
+  },
+  "pr_auc_definition": "Average precision is primary; trapezoidal PR integral is separately reported",
+  "probability_readout": "Native choice readout: max over valid token forms per option, softmax across options; no fitted calibration",
+  "test_target_metrics": {
+    "15-PGDH": {
+      "records": 6,
+      "binders": 0,
+      "threshold": 0.2689414213699951,
+      "roc_auc": null,
+      "pr_auc_average_precision": null,
+      "pr_auc_trapezoidal": null,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": null,
+      "accuracy": 1.0,
+      "confusion_matrix": [
+        [
+          6,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 1.0,
+      "warnings": [
+        "Single-class cohort: ROC/PR AUC and balanced accuracy reported as null"
+      ]
+    },
+    "BBF-14": {
+      "records": 9,
+      "binders": 0,
+      "threshold": 0.2689414213699951,
+      "roc_auc": null,
+      "pr_auc_average_precision": null,
+      "pr_auc_trapezoidal": null,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": null,
+      "accuracy": 1.0,
+      "confusion_matrix": [
+        [
+          9,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 1.0,
+      "warnings": [
+        "Single-class cohort: ROC/PR AUC and balanced accuracy reported as null"
+      ]
+    },
+    "BHRF1": {
+      "records": 7,
+      "binders": 1,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.6666666666666666,
+      "pr_auc_average_precision": 0.25,
+      "pr_auc_trapezoidal": 0.125,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.8571428571428571,
+      "confusion_matrix": [
+        [
+          6,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.8571428571428571,
+      "warnings": []
+    },
+    "Cas9": {
+      "records": 5,
+      "binders": 1,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.875,
+      "pr_auc_average_precision": 0.5,
+      "pr_auc_trapezoidal": 0.75,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.8,
+      "confusion_matrix": [
+        [
+          4,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.8,
+      "warnings": []
+    },
+    "EGFR": {
+      "records": 17,
+      "binders": 2,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.8,
+      "pr_auc_average_precision": 0.25,
+      "pr_auc_trapezoidal": 0.4375,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.8823529411764706,
+      "confusion_matrix": [
+        [
+          15,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.8823529411764706,
+      "warnings": []
+    },
+    "IL-7Ra": {
+      "records": 12,
+      "binders": 8,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.71875,
+      "pr_auc_average_precision": 0.8291396103896104,
+      "pr_auc_trapezoidal": 0.8654626623376623,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.6666666666666666,
+      "confusion_matrix": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          8
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.3333333333333333,
+      "warnings": []
+    },
+    "Latent GDF-8": {
+      "records": 10,
+      "binders": 3,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.5714285714285714,
+      "pr_auc_average_precision": 0.4111111111111111,
+      "pr_auc_trapezoidal": 0.46944444444444444,
+      "precision": 0.5,
+      "recall": 0.3333333333333333,
+      "f1": 0.4,
+      "balanced_accuracy": 0.5952380952380952,
+      "accuracy": 0.7,
+      "confusion_matrix": [
+        [
+          6,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7,
+      "warnings": []
+    },
+    "MBP": {
+      "records": 16,
+      "binders": 0,
+      "threshold": 0.2689414213699951,
+      "roc_auc": null,
+      "pr_auc_average_precision": null,
+      "pr_auc_trapezoidal": null,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": null,
+      "accuracy": 1.0,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 1.0,
+      "warnings": [
+        "Single-class cohort: ROC/PR AUC and balanced accuracy reported as null"
+      ]
+    },
+    "Nipah-G": {
+      "records": 13,
+      "binders": 3,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.9833333333333334,
+      "pr_auc_average_precision": 0.9166666666666665,
+      "pr_auc_trapezoidal": 0.9583333333333333,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8,
+      "balanced_accuracy": 0.8333333333333333,
+      "accuracy": 0.9230769230769231,
+      "confusion_matrix": [
+        [
+          10,
+          0
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7692307692307693,
+      "warnings": []
+    },
+    "PD-L1": {
+      "records": 5,
+      "binders": 3,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.16666666666666666,
+      "pr_auc_average_precision": 0.5333333333333333,
+      "pr_auc_trapezoidal": 0.35000000000000003,
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1": 0.75,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.6,
+      "confusion_matrix": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.4,
+      "warnings": []
+    },
+    "RBX1": {
+      "records": 13,
+      "binders": 3,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 1.0,
+      "pr_auc_average_precision": 1.0,
+      "pr_auc_trapezoidal": 1.0,
+      "precision": 0.25,
+      "recall": 1.0,
+      "f1": 0.4,
+      "balanced_accuracy": 0.55,
+      "accuracy": 0.3076923076923077,
+      "confusion_matrix": [
+        [
+          1,
+          9
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7692307692307693,
+      "warnings": []
+    },
+    "TNFa": {
+      "records": 13,
+      "binders": 2,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.5909090909090909,
+      "pr_auc_average_precision": 0.26666666666666666,
+      "pr_auc_trapezoidal": 0.16458333333333333,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.8461538461538461,
+      "confusion_matrix": [
+        [
+          11,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.8461538461538461,
+      "warnings": []
+    },
+    "TREM2": {
+      "records": 8,
+      "binders": 7,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.21428571428571427,
+      "pr_auc_average_precision": 0.852891156462585,
+      "pr_auc_trapezoidal": 0.8210034013605443,
+      "precision": 0.875,
+      "recall": 1.0,
+      "f1": 0.9333333333333333,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.875,
+      "confusion_matrix": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.125,
+      "warnings": []
+    },
+    "TrkA": {
+      "records": 13,
+      "binders": 3,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.8166666666666667,
+      "pr_auc_average_precision": 0.6555555555555554,
+      "pr_auc_trapezoidal": 0.7277777777777776,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.7692307692307693,
+      "confusion_matrix": [
+        [
+          10,
+          0
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.7692307692307693,
+      "warnings": []
+    },
+    "VEGF-A": {
+      "records": 14,
+      "binders": 8,
+      "threshold": 0.2689414213699951,
+      "roc_auc": 0.3541666666666667,
+      "pr_auc_average_precision": 0.5366883116883117,
+      "pr_auc_trapezoidal": 0.4198551448551448,
+      "precision": 0.5714285714285714,
+      "recall": 1.0,
+      "f1": 0.7272727272727273,
+      "balanced_accuracy": 0.5,
+      "accuracy": 0.5714285714285714,
+      "confusion_matrix": [
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          8
+        ]
+      ],
+      "confusion_matrix_layout": "rows=true [non_binder,binder], columns=predicted [non_binder,binder]",
+      "majority_class_from_training": 0,
+      "majority_class_accuracy": 0.42857142857142855,
+      "warnings": []
+    }
+  },
+  "run_manifest_sha256": "055bbd2f41e96eaa6f6a8632b3fe42447d4847715e96fdd944ae0995415da7df"
+}

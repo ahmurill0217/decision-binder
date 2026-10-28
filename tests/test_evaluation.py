@@ -90,3 +90,54 @@ def test_decision_checkpoint_resume_and_prompt_parity(tmp_path, monkeypatch):
     path.write_text(path.read_text() + path.read_text().splitlines()[0] + "\n")
     with pytest.raises(ValueError, match="Duplicate"):
         score_frame(*args)
+
+
+def test_comparison_requires_exact_uuid_labels_targets():
+    from decision_binder.compare import verify_cohort
+    predictions = pd.DataFrame({'uuid': ['a', 'b'], 'ground_truth_label': [0, 1], 'target': ['X', 'Y']})
+    source = predictions.rename(columns={'ground_truth_label': 'label'})
+    verify_cohort(predictions.iloc[::-1], source)
+    with pytest.raises(ValueError, match='UUID cohort'):
+        verify_cohort(predictions.iloc[:1], source)
+    changed = source.copy()
+    changed.loc[0, 'label'] = 1
+    with pytest.raises(ValueError, match='labels/targets'):
+        verify_cohort(predictions, changed)
+
+
+def test_comparison_reproduces_metrics_and_all_figures(tmp_path):
+    import yaml
+    from decision_binder.compare import comparison
+    from decision_binder.data import digest, write_json
+    (tmp_path / 'configs').mkdir()
+    (tmp_path / 'configs/experiment.yaml').write_text(yaml.safe_dump({'paths': {'results': 'results', 'processed': 'data/processed'}}))
+    splits = tmp_path / 'data/processed/splits/primary'
+    splits.mkdir(parents=True)
+    source = pd.DataFrame({'uuid': ['a', 'b', 'c', 'd'], 'label': [0, 0, 1, 1], 'target': ['X'] * 4})
+    for split in ('train', 'validation', 'test'):
+        source.to_parquet(splits / f'{split}.parquet')
+    meta = tmp_path / 'metadata.json'
+    write_json(meta, {'log_history': [{'step': 1, 'loss': 1.2}, {'step': 2, 'eval_loss': .5}]})
+    for kind, scores in [('zero_shot', [.1, .4, .35, .8]), ('fine_tuned', [.1, .2, .8, .9]),
+                         ('logistic_regression', [.2, .1, .7, .9])]:
+        folder = tmp_path / 'results' / kind / 'primary'
+        folder.mkdir(parents=True)
+        frame = source.rename(columns={'label': 'ground_truth_label'}).assign(binder_probability=scores)
+        for split in ('test', 'validation'):
+            frame.to_parquet(folder / f'{split}_predictions.parquet')
+        threshold = choose_threshold(frame.ground_truth_label, scores)
+        threshold['test_used_for_selection'] = False
+        write_json(folder / 'threshold.json', threshold)
+        write_json(folder / 'run_manifest.json', {'provenance': {'device': 'cpu', 'dtype': 'float32', 'adapter': {'training_metadata_sha256': digest(meta)}}})
+        if kind == 'logistic_regression':
+            write_json(folder / 'metrics.json', {'completed': True})
+    alternate = tmp_path / 'configs/alternate.yaml'
+    (tmp_path / 'configs/experiment.yaml').rename(alternate)
+    report = comparison(tmp_path, training_metadata=meta, config_path=alternate)
+    assert report['metrics']['Base d1-3B']['roc_auc'] == .75
+    assert report['metrics']['Fine-tuned d1-3B']['roc_auc'] == 1
+    assert report['metrics']['Logistic regression']['roc_auc'] == 1
+    generated = (tmp_path / 'results/comparison/primary/metrics.md').read_text()
+    assert '| ROC-AUC | 0.750000 | 1.000000 |' in generated
+    assert len(list((tmp_path / 'results/figures/primary').glob('*.png'))) == 5
+    assert len(list((tmp_path / 'results/figures/primary').glob('*.svg'))) == 5

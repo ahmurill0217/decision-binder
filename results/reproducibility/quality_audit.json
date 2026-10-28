@@ -1,0 +1,34 @@
+{
+  "review_date": "2026-10-28",
+  "dependency_lock_check": "uv lock --offline --check passed; 94 packages",
+  "offline_cpu_tests": {
+    "passed": 58,
+    "integration_deselected": 10,
+    "command": "HF_HUB_OFFLINE=1 HF_DATASETS_OFFLINE=1 .venv/bin/python -m pytest -m 'not integration' -q",
+    "model_or_dataset_downloads": false,
+    "gpu_required": false
+  },
+  "cached_integration_tests": {
+    "passed": 8,
+    "skipped": 2,
+    "skip_reason": "Synthetic tokenizer variants intentionally excluded from two native-only integration checks"
+  },
+  "ci": "Configured; remote execution not performed in this audit",
+  "tracked_artifact_check": "passed; no tracked generated cohorts, model weights, checkpoints or files over 10 MiB",
+  "checksums": {
+    "uv.lock": "7e0403bba720259953501837e2616855cf2677db46d04a0c8f14c7332afc3750",
+    "configs/experiment.yaml": "a16c07da2c9abc8550e47d26a8bbc4a554ec01f930fb1b04b0bc55cdb538f16d",
+    ".gitignore": "c9d2a257a26bbd2ca1fbeb1fde52529df1f19280529a5ce8885a6d4e824a9a8f",
+    ".github/workflows/tests.yml": "2644772ab3e7942f52e45620d74bfb31799950b2d57d469f0a5d63a2eeb28611",
+    "docs/reproducibility.md": "4d401cddbce0019d0bd35556e25915296d62a66ec1fe34a8b16815820032d91c",
+    "docs/licensing.md": "19b317a5a9dc16e59036c8d7fa0af38d8e33116baa4e97ce4f2a456cddf87215"
+  },
+  "model_license_sha256": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c",
+  "unresolved": [
+    "Colab/local SFT file hashes differ; exact training prompt equality unverified",
+    "Historical evaluation system inventory was limited to device/precision; retrospective configs labeled explicitly",
+    "Original repository code license not selected",
+    "Reference notebook redistribution licenses and historical commit IDs not established",
+    "Unseen-target generalization not evaluated"
+  ]
+}

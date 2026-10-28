@@ -1,0 +1,102 @@
+{
+  "zero_shot": {
+    "capture": "retrospective, not an original run-time config snapshot",
+    "source_training_metadata_sha256": "eacb244baea99fab3c57f341b779a1411bb21a79238f1e78a0d88034f349d3c9",
+    "original_run_manifest_sha256": "47d5123c5de7b60789d7cf1bb14745e031ad8c99c0d817b14aba302b269ca560",
+    "shared_pipeline_configuration": {
+      "dataset": {
+        "id": "Anthropic/claude-protein-binder-design",
+        "revision": "9e1b81696da46835e9e9cde9a3da976e0abc92ab",
+        "split": "full"
+      },
+      "preprocessing": {
+        "not_expressed": "exclude",
+        "prediction_scope": "primary",
+        "near_duplicate_identity": 0.9
+      },
+      "splits": {
+        "seed": 1337,
+        "fractions": [
+          0.7,
+          0.15,
+          0.15
+        ],
+        "search_trials": 64,
+        "target_holdout": {
+          "validation_targets": [],
+          "test_targets": []
+        }
+      },
+      "model": {
+        "id": "LiquidAI/d1-3B",
+        "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+        "assets_sha256": {
+          "prompt.py": "a20b5f52e41a6d29e694bb8c861a5a4803ce3eb69364edad79511ccf8edb5c31",
+          "tokenizer.json": "8096ecb9f54599d756c8de728a598a340bc1e43c0deb77ddd62456c38349fcee",
+          "tokenizer_config.json": "ef6770d12dd9ac58d334e979bf160c5cdfd41f13d205fd5d5516857645feb0ea",
+          "chat_template.jinja": "86f4770449a4797c9b4212d110b0cc70fb993c1ce960095bcfb12eea22f61cca",
+          "LICENSE": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+        }
+      },
+      "sft": {
+        "seed": 1337
+      }
+    },
+    "original_recorded_hardware": {
+      "device": "mps",
+      "dtype": "torch.bfloat16",
+      "batch_size": 1
+    },
+    "hardware_detail": "Historical manifests record device/precision, not detailed system inventory; do not backfill as measured."
+  },
+  "fine_tuned": {
+    "capture": "retrospective, not an original run-time config snapshot",
+    "source_training_metadata_sha256": "eacb244baea99fab3c57f341b779a1411bb21a79238f1e78a0d88034f349d3c9",
+    "original_run_manifest_sha256": "055bbd2f41e96eaa6f6a8632b3fe42447d4847715e96fdd944ae0995415da7df",
+    "shared_pipeline_configuration": {
+      "dataset": {
+        "id": "Anthropic/claude-protein-binder-design",
+        "revision": "9e1b81696da46835e9e9cde9a3da976e0abc92ab",
+        "split": "full"
+      },
+      "preprocessing": {
+        "not_expressed": "exclude",
+        "prediction_scope": "primary",
+        "near_duplicate_identity": 0.9
+      },
+      "splits": {
+        "seed": 1337,
+        "fractions": [
+          0.7,
+          0.15,
+          0.15
+        ],
+        "search_trials": 64,
+        "target_holdout": {
+          "validation_targets": [],
+          "test_targets": []
+        }
+      },
+      "model": {
+        "id": "LiquidAI/d1-3B",
+        "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+        "assets_sha256": {
+          "prompt.py": "a20b5f52e41a6d29e694bb8c861a5a4803ce3eb69364edad79511ccf8edb5c31",
+          "tokenizer.json": "8096ecb9f54599d756c8de728a598a340bc1e43c0deb77ddd62456c38349fcee",
+          "tokenizer_config.json": "ef6770d12dd9ac58d334e979bf160c5cdfd41f13d205fd5d5516857645feb0ea",
+          "chat_template.jinja": "86f4770449a4797c9b4212d110b0cc70fb993c1ce960095bcfb12eea22f61cca",
+          "LICENSE": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+        }
+      },
+      "sft": {
+        "seed": 1337
+      }
+    },
+    "original_recorded_hardware": {
+      "device": "mps",
+      "dtype": "torch.bfloat16",
+      "batch_size": 1
+    },
+    "hardware_detail": "Historical manifests record device/precision, not detailed system inventory; do not backfill as measured."
+  }
+}

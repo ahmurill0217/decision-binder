@@ -1,0 +1,12 @@
+{
+  "threshold": 0.2689414213699951,
+  "selection_split": "validation",
+  "objective": "balanced_accuracy",
+  "validation_objective": 0.7950660450660451,
+  "rule": "predict binder when probability >= threshold",
+  "candidates": "unique validation probabilities plus 0, 0.5, 1",
+  "tie_break": "scores equal to 12 decimals: closest to 0.5, then higher threshold",
+  "candidates_evaluated": 41,
+  "validation_decisions_sha256": "3fa066699138a78bb6cd97e1f631ba7c8a0865f42e5acdcecf95a9e2ab3785c4",
+  "test_used_for_selection": false
+}

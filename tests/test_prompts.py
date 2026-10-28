@@ -15,8 +15,11 @@ from decision_binder.prompts import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-@pytest.fixture(scope="module")
-def assets():
+@pytest.fixture(scope="module", params=["synthetic", pytest.param("native", marks=pytest.mark.integration)])
+def assets(request):
+    if request.param == "synthetic":
+        from fixtures.prompt_assets import Tokenizer, Utility
+        return Tokenizer(), Utility()
     config = yaml.safe_load((ROOT / "configs/experiment.yaml").read_text())
     directory = ROOT / "data/raw/d1_tokenizer"
     if not all((directory / name).exists() for name in ASSET_FILES):
@@ -101,7 +104,10 @@ def test_invalid_state_rejected(record, bad):
         feature_state(record | {"sc_dockq_min": bad})
 
 
+@pytest.mark.integration
 def test_tokenizer_does_not_load_model_or_trainer(assets, monkeypatch):
+    if type(assets[0]).__module__ == "fixtures.prompt_assets":
+        pytest.skip("This integration check specifically requires native tokenizer assets")
     # Torch is now optionally installed for Section 5. Transformers may import
     # it opportunistically, but formatting must never load any model weights.
     import importlib.util
@@ -128,7 +134,10 @@ def test_asset_tampering_rejected(tmp_path):
         load_prompt_assets(config, tmp_path)
 
 
+@pytest.mark.integration
 def test_saved_splits_and_shared_format(assets):
+    if type(assets[0]).__module__ == "fixtures.prompt_assets":
+        pytest.skip("Saved native prompts require native tokenizer assets")
     directory = ROOT / "data/sft/primary/dataset"
     if not directory.exists():
         pytest.skip("Run SFT preprocessing for saved-dataset integration check")

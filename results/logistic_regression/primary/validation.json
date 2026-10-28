@@ -1,0 +1,16 @@
+{
+  "offline_cpu_tests_passed": 67,
+  "synthetic_checks": [
+    "train-only scaling and category fitting",
+    "unknown categories accepted without refitting",
+    "outcome invariance",
+    "deterministic repeated fitting",
+    "positive-class probability mapping",
+    "duplicate UUID rejection",
+    "three-model comparison generation"
+  ],
+  "pipeline_reload_probabilities_identical": true,
+  "test_cohort_matches_baseline": true,
+  "threshold_selection_split": "validation",
+  "hyperparameter_search": false
+}

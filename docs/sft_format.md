@@ -33,7 +33,7 @@ Tests also show that flipping labels or adding outcome columns cannot change the
 
 ## Deferred TRL completion-only loss verification
 
-At Section 4, tokenizer validation was complete and trainer/collator checks were deferred. Section 6 has now verified actual TRL-prepared labels and collator masks on all train/validation rows; CUDA forward/backward verification remains pending. See [training status](training.md). Before later training, pin and inspect the chosen TRL version and explicitly enable completion-only loss for the string prompt/completion dataset. Use only the training partition for weight updates, validation for evaluation during development, and keep test out of trainer fitting and hyperparameter selection.
+At Section 4, tokenizer validation was complete and trainer/collator checks were deferred. Section 6 has now verified actual TRL-prepared labels and collator masks on all train/validation rows; CUDA forward/backward, finite adapter updates, and save/reload subsequently passed in Colab. See [training status](training.md). Before later training, pin and inspect the chosen TRL version and explicitly enable completion-only loss for the string prompt/completion dataset. Use only the training partition for weight updates, validation for evaluation during development, and keep test out of trainer fitting and hyperparameter selection.
 
 Before the first optimizer step, inspect a small collated batch containing both answer codes and unequal prompt lengths:
 

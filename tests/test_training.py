@@ -12,6 +12,33 @@ from trl.trainer.sft_trainer import DataCollatorForLanguageModeling
 from decision_binder.data import digest, write_json
 from decision_binder.train import choose_precision, load_training_data, run, smoke_subset, verify_lora, verify_masking, verify_source_lengths
 from decision_binder.train import diagnostic_json, record_progress
+from decision_binder.train import configure_loss_scaler, trainer_args
+
+
+def test_amp_scale_configuration_and_real_optimizer_update():
+    # Exercise the real scaler on CPU; this does not certify CUDA numerics.
+    scaler = torch.amp.GradScaler("cpu")
+    accelerator = SimpleNamespace(scaler=scaler)
+    assert configure_loss_scaler(accelerator, "fp16", 16.0) == 16.0
+    p = torch.nn.Parameter(torch.tensor(1.0))
+    optimizer = torch.optim.SGD([p], lr=0.1)
+    scaler.scale(p.square()).backward()
+    scaler.step(optimizer)
+    scaler.update()
+    assert p.item() == pytest.approx(0.8)
+    assert configure_loss_scaler(SimpleNamespace(scaler=None), "bf16", 16.0) is None
+    with pytest.raises(ValueError, match="positive"):
+        configure_loss_scaler(accelerator, "fp16", float("nan"))
+
+
+def test_smoke_disables_warmup_but_full_preserves_it(tmp_path):
+    import yaml
+    config = yaml.safe_load((Path(__file__).resolve().parents[1] / "configs/experiment.yaml").read_text())
+    # CPU hardware avoids requiring CUDA for argument construction.
+    smoke = trainer_args(config, tmp_path, "smoke", {"precision": "none"})
+    full = trainer_args(config, tmp_path, "full", {"precision": "none"})
+    assert smoke.warmup_steps == 0
+    assert full.warmup_steps == config["training"]["warmup_steps"]
 
 
 def test_nonfinite_diagnostics_remain_valid_json(tmp_path):

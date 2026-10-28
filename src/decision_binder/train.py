@@ -140,6 +140,21 @@ def choose_precision(requested, bf16_supported):
     return ("bf16" if bf16_supported else "fp16") if requested == "auto" else requested
 
 
+def configure_loss_scaler(accelerator, precision, initial_scale):
+    """Configure the existing AMP scaler before Accelerate prepares the optimizer."""
+    if precision != "fp16":
+        return None
+    if not math.isfinite(initial_scale) or initial_scale <= 0:
+        raise ValueError("fp16_initial_scale must be finite and positive")
+    scaler = accelerator.scaler
+    if scaler is None or not scaler.is_enabled():
+        raise RuntimeError("Expected an enabled fp16 AMP scaler")
+    state = scaler.state_dict()
+    state["scale"] = float(initial_scale)
+    scaler.load_state_dict(state)
+    return scaler.get_scale()
+
+
 def smoke_subset(dataset, count, tokenizer):
     if not isinstance(count, int) or count < 1:
         raise ValueError("Smoke example count must be a positive integer")
@@ -175,7 +190,7 @@ def trainer_args(config, output, mode, hardware):
     args = {key: t[key] for key in fields}
     if mode == "smoke":
         args.update(max_steps=t["smoke"]["max_steps"], gradient_accumulation_steps=t["smoke"]["gradient_accumulation_steps"],
-                    logging_steps=1, eval_steps=1, save_strategy="no", load_best_model_at_end=False)
+                    warmup_steps=0, logging_steps=1, eval_steps=1, save_strategy="no", load_best_model_at_end=False)
     if mode == "preflight":
         args.update(use_cpu=True, save_strategy="no", eval_strategy="no", load_best_model_at_end=False)
     return SFTConfig(**args, output_dir=str(output), data_seed=t["seed"],
@@ -238,6 +253,8 @@ def run(config_path, mode="preflight", output_override=None, download=False, app
     args = trainer_args(config, output, mode, hardware)
     trainer = SFTTrainer(model=model, args=args, train_dataset=original["train"].remove_columns("uuid"),
                          eval_dataset=original["validation"].remove_columns("uuid"), processing_class=tokenizer)
+    initial_scale = configure_loss_scaler(trainer.accelerator, hardware["precision"],
+                                          t.get("fp16_initial_scale", 16.0))
     masking = verify_masking(trainer, original, tokenizer)
     report = {"mode": mode, "status": "preflight_passed", "hardware": hardware, "config": config,
               "model_identifier": config["model"]["id"], "model_revision": config["model"]["revision"],
@@ -248,13 +265,22 @@ def run(config_path, mode="preflight", output_override=None, download=False, app
               "run_uuids": {s: list(ds["uuid"]) for s, ds in original.items()},
               "trainer_args": args.to_dict(), "test_split_loaded": False,
               "versions": {p: version(p) for p in ("torch", "transformers", "trl", "peft", "accelerate", "datasets")},
-              "code_sha256": digest(Path(__file__))}
+              "code_sha256": digest(Path(__file__)), "initial_loss_scale": initial_scale,
+              "optimizer_steps": []}
     write_json(output / "metadata.json", report)
     print(f"Preflight passed: {lora['trainable_parameters']:,} trainable LoRA parameters; masks verified.", flush=True)
     if mode == "preflight":
         return report
 
     class FiniteLoss(TrainerCallback):
+        def on_step_end(self, args, state, control, **kwargs):
+            scaler = trainer.accelerator.scaler
+            report["optimizer_steps"].append({
+                "global_step": state.global_step,
+                "skipped": bool(trainer.accelerator.optimizer_step_was_skipped),
+                "loss_scale_after_step": scaler.get_scale() if scaler is not None else None,
+            })
+
         def on_log(self, args, state, control, logs=None, **kwargs):
             record_progress(output, state, logs)
 
@@ -267,8 +293,11 @@ def run(config_path, mode="preflight", output_override=None, download=False, app
         if not math.isfinite(train_result.training_loss) or not math.isfinite(evaluation["eval_loss"]):
             raise FloatingPointError("Nonfinite final loss")
         changed = [n for n, p in model.named_parameters() if n in before and not torch.equal(p.detach().cpu(), before[n])]
-        if not changed or not all(torch.isfinite(p).all() for p in model.parameters() if p.requires_grad):
-            raise ValueError("LoRA parameters did not update finitely")
+        if not all(torch.isfinite(p).all() for p in model.parameters() if p.requires_grad):
+            raise FloatingPointError("LoRA parameters contain nonfinite values")
+        if not changed:
+            skipped = sum(s["skipped"] for s in report["optimizer_steps"])
+            raise ValueError(f"LoRA parameters did not change; AMP skipped {skipped}/{len(report['optimizer_steps'])} optimizer steps")
         adapter = output / "adapter"
         trainer.save_model(str(adapter))
         trainer.save_state()

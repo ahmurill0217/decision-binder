@@ -36,6 +36,7 @@ training:
   experiment: primary
   output_dir: artifacts/lora/primary
   precision: auto # CUDA bf16 if natively supported; fp16 on T4
+  fp16_initial_scale: 16.0 # conservative AMP start after T4 smoke overflow; dynamic scaling stays enabled
   per_device_train_batch_size: 1 # long structural prompts; effective batch stays 16
   per_device_eval_batch_size: 1
   gradient_accumulation_steps: 16

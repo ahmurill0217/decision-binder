@@ -16,6 +16,27 @@ MODEL_FILES = (*ASSET_FILES, "config.json", "modeling_d1.py", "hybrid.py", "lfm2
 SPLITS = ("train", "validation")  # Never open, tokenize, evaluate, or fit on test.
 
 
+def diagnostic_json(value):
+    """Keep nonfinite diagnostic metrics explicit without emitting invalid JSON."""
+    if isinstance(value, float) and not math.isfinite(value):
+        return "NaN" if math.isnan(value) else ("Infinity" if value > 0 else "-Infinity")
+    if isinstance(value, dict):
+        return {k: diagnostic_json(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [diagnostic_json(v) for v in value]
+    return value
+
+
+def record_progress(output, state, logs):
+    # Save evidence before raising, including grad_norm when AMP skips an update.
+    write_json(output / "progress.json", diagnostic_json(
+        {"global_step": state.global_step, "logs": state.log_history}))
+    invalid_losses = {k: diagnostic_json(v) for k, v in (logs or {}).items()
+                      if "loss" in k and not math.isfinite(float(v))}
+    if invalid_losses:
+        raise FloatingPointError(f"Nonfinite training/validation loss: {invalid_losses}")
+
+
 def load_training_data(root, config):
     mode = config["training"]["experiment"]
     if mode not in ("primary", "target_holdout"):
@@ -235,9 +256,7 @@ def run(config_path, mode="preflight", output_override=None, download=False, app
 
     class FiniteLoss(TrainerCallback):
         def on_log(self, args, state, control, logs=None, **kwargs):
-            if logs and any(not math.isfinite(float(v)) for k, v in logs.items() if "loss" in k):
-                raise FloatingPointError("Nonfinite training/validation loss")
-            write_json(output / "progress.json", {"global_step": state.global_step, "logs": state.log_history})
+            record_progress(output, state, logs)
 
     trainer.add_callback(FiniteLoss())
     before = {n: p.detach().cpu().clone() for n, p in model.named_parameters() if p.requires_grad}
@@ -259,7 +278,7 @@ def run(config_path, mode="preflight", output_override=None, download=False, app
                       peak_gpu_allocated_gib=torch.cuda.max_memory_allocated() / 1024**3,
                       peak_gpu_reserved_gib=torch.cuda.max_memory_reserved() / 1024**3,
                       changed_lora_tensors=len(changed), log_history=trainer.state.log_history)
-        write_json(output / "metadata.json", report)
+        write_json(output / "metadata.json", diagnostic_json(report))
         # Release training state before loading a fresh base, avoiding two GPU copies.
         del trainer, model, before
         gc.collect()
@@ -271,11 +290,12 @@ def run(config_path, mode="preflight", output_override=None, download=False, app
             raise ValueError("Adapter reload changed saved tensors")
         report.update(status="passed", adapter_reload_verified=True,
                       adapter_sha256={p.name: digest(p) for p in adapter.iterdir() if p.is_file()})
-        write_json(output / "metadata.json", report)
+        write_json(output / "metadata.json", diagnostic_json(report))
         return report
     except Exception as error:
-        report.update(status="failed", error=f"{type(error).__name__}: {error}")
-        write_json(output / "metadata.json", report)
+        report.update(status="failed", error=f"{type(error).__name__}: {error}",
+                      log_history=trainer.state.log_history if "trainer" in locals() else report.get("log_history", []))
+        write_json(output / "metadata.json", diagnostic_json(report))
         raise
 
 

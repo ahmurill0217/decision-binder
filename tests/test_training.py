@@ -1,4 +1,5 @@
 import json
+import math
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -10,6 +11,27 @@ from trl.trainer.sft_trainer import DataCollatorForLanguageModeling
 
 from decision_binder.data import digest, write_json
 from decision_binder.train import choose_precision, load_training_data, run, smoke_subset, verify_lora, verify_masking, verify_source_lengths
+from decision_binder.train import diagnostic_json, record_progress
+
+
+def test_nonfinite_diagnostics_remain_valid_json(tmp_path):
+    logs = {"loss": 1.25, "grad_norm": float("nan")}
+    state = SimpleNamespace(global_step=1, log_history=[logs])
+    record_progress(tmp_path, state, logs)
+    saved = json.loads((tmp_path / "progress.json").read_text())
+    assert saved["logs"] == [{"loss": 1.25, "grad_norm": "NaN"}]
+    assert math.isnan(logs["grad_norm"])
+    assert diagnostic_json([float("inf"), float("-inf")]) == ["Infinity", "-Infinity"]
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_nonfinite_loss_still_fails_after_saving_evidence(tmp_path, value):
+    logs = {"eval_loss": value}
+    state = SimpleNamespace(global_step=1, log_history=[logs])
+    with pytest.raises(FloatingPointError, match="eval_loss"):
+        record_progress(tmp_path, state, logs)
+    assert json.loads((tmp_path / "progress.json").read_text())["logs"][0]["eval_loss"] in {
+        "NaN", "Infinity", "-Infinity"}
 
 
 def test_precision_and_full_run_guard():

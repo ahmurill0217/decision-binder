@@ -48,6 +48,8 @@ Unquantized base weights alone need roughly 6 GB in half precision. LoRA weights
 
 ## Colab smoke test
 
+If a run reports `Out of range float values are not JSON compliant: nan`, update the training code before retrying in a new output directory. The initial progress logger rejected nonfinite diagnostic metrics, obscuring which metric failed. Progress and metadata now encode these explicitly as strings (`NaN`, `Infinity`, `-Infinity`), while nonfinite training/validation loss still raises an error after saving the evidence. A nonfinite gradient norm may accompany a skipped fp16 AMP update; it is not by itself proof of nonfinite loss. Inspect `progress.json` and failure `log_history`; a passing smoke still requires finite losses and finite, changed adapter weights. The logger fix has CPU regression coverage; a new Colab smoke is required to verify GPU behavior.
+
 1. Publish this project to a Git repository. This local checkout currently has no Git remote; no repository URL has been invented or published by the implementation.
 2. Open `notebooks/finetune_colab.ipynb` in Colab. Set `REPO_URL`, preferably set `REPO_REF` to an immutable commit, and select an NVIDIA GPU runtime with Python >=3.12.
 3. Leave `RUN_FULL_TRAINING = False`. Enable Google Drive for persistent output, or download results before the ephemeral runtime disconnects.
